@@ -100,6 +100,7 @@ class HandModel(object):
 
         # apply changes
         self.global_trans[:] = global_t
+        return xyz + global_t
 
     def render(self, cam_intrinsics, dist=None, M=None, img_shape=None, render_mask=False):
         from opendr.camera import ProjectPoints

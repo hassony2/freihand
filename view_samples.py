@@ -39,7 +39,8 @@ def show_training_samples(base_path, version, num2show=None, render_mano=False):
 
             # set up the hand model and feed hand parameters
             renderer = HandModel(use_mean_pca=False, use_mean_pose=True)
-            renderer.pose_by_root(xyz_root[0], poses[0], shapes[0])
+            xyz_comp = renderer.pose_by_root(xyz_root[0], poses[0], shapes[0])
+            print('Computed and loaded joints differ by ', np.linalg.norm(xyz_comp - xyz, 2))
             msk_rendered = renderer.render(K, img_shape=img.shape[:2])
 
         # show
@@ -47,6 +48,9 @@ def show_training_samples(base_path, version, num2show=None, render_mano=False):
         ax1 = fig.add_subplot(121)
         ax2 = fig.add_subplot(122)
         ax1.imshow(img)
+        if render_mano:
+            ax1.imshow(msk_rendered, alpha=0.4)
+        ax1.imshow(msk, alpha=0.4)
         ax2.imshow(msk if msk_rendered is None else msk_rendered)
         plot_hand(ax1, uv, order='uv')
         plot_hand(ax2, uv, order='uv')
